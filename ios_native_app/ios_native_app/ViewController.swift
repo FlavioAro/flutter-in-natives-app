@@ -12,6 +12,7 @@ class ViewController: UIViewController {
     lazy var flutterEngine = FlutterEngine(name: "module_flutter_engine")
     var channel: FlutterMethodChannel!
     var textField: UITextField!
+    var label: UILabel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,11 +21,25 @@ class ViewController: UIViewController {
         channel = FlutterMethodChannel(name: "example.com/channel", binaryMessenger: flutterEngine.binaryMessenger)
         channel.setMethodCallHandler(handleMethodCall)
 
-        setupTextField()
-        setupButton()
+        myLabel()
+        myTextField()
+        myButton()
+    }
+    
+    func myLabel() {
+            label = UILabel()
+            label.text = "iOS"
+            label.textAlignment = .center
+            label.font = UIFont.systemFont(ofSize: 32)
+            view.addSubview(label)
+            label.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                label.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8)
+            ])
     }
 
-    func setupTextField() {
+    func myTextField() {
         textField = UITextField(frame: CGRect(x: 45, y: 100, width: 300, height: 40))
         textField.borderStyle = .roundedRect
         textField.placeholder = "Enter a value to send.."
@@ -32,7 +47,7 @@ class ViewController: UIViewController {
         textField.translatesAutoresizingMaskIntoConstraints = false
     }
 
-    func setupButton() {
+    func myButton() {
         let button = UIButton(type: .custom)
         button.setTitle("SEND THE VALUE TO THE FLUTTER", for: .normal)
         button.backgroundColor = .systemOrange
