@@ -12,7 +12,7 @@ import io.flutter.plugin.common.MethodChannel
 
 private const val FLUTTER_ENGINE_ID = "module_flutter_engine"
 private const val CHANNEL_NAME = "example.com/channel"
-private const val METHOD_GET_TEXT = "getText"
+private const val METHOD_GET_DATA = "data"
 
 class MainActivity : AppCompatActivity() {
 
@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL_NAME)
             .setMethodCallHandler { call, result ->
                 when (call.method) {
-                    METHOD_GET_TEXT -> result.success(myEditText.text.toString())
+                    METHOD_GET_DATA -> result.success(myEditText.text.toString())
                     else -> result.notImplemented()
                 }
             }
@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         myButton.setOnClickListener {
             // Send text to Flutter using MethodChannel
             MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL_NAME)
-                .invokeMethod(METHOD_GET_TEXT, myEditText.text.toString())
+                .invokeMethod(METHOD_GET_DATA, myEditText.text.toString())
 
             startActivity(
                 FlutterActivity

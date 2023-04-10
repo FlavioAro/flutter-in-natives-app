@@ -10,14 +10,14 @@
 
     <EditText
         android:id="@+id/myEditText"
-        android:layout_width="match_parent"
+        android:layout_width="275dp"
         android:layout_height="wrap_content"
         android:hint="Enter a value to send.." />
 
     <Button
         android:id="@+id/myButton"
-        android:layout_width="wrap_content"
+        android:layout_width="275dp"
         android:layout_height="wrap_content"
-        android:text="SEND THE VALUE TO THE FLUTTER" />
+        android:text="TO SEND" />
 
 </LinearLayout>
