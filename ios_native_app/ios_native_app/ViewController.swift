@@ -9,50 +9,68 @@ import UIKit
 import Flutter
 
 class ViewController: UIViewController {
-    lazy var flutterEngine = FlutterEngine(name: "module_flutter_engine")
-    var channel: FlutterMethodChannel!
-    var textField: UITextField!
-    var label: UILabel!
-
+    
+    // MARK: - Properties
+    
+    private lazy var flutterEngine = FlutterEngine(name: "module_flutter_engine")
+    private var channel: FlutterMethodChannel!
+    
+    private var label: UILabel!
+    private var textField: UITextField!
+    private var button: UIButton!
+    
+    // MARK: - Lifecycle Methods
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        flutterEngine.run()
-        channel = FlutterMethodChannel(name: "example.com/channel", binaryMessenger: flutterEngine.binaryMessenger)
-        channel.setMethodCallHandler(handleMethodCall)
-
-        myLabel()
-        myTextField()
-        myButton()
+        configureFlutterEngine()
+        configureFlutterChannel()
+        configureLabel()
+        configureTextField()
+        configureButton()
     }
     
-    func myLabel() {
-            label = UILabel()
-            label.text = "iOS"
-            label.textAlignment = .center
-            label.font = UIFont.systemFont(ofSize: 32)
-            view.addSubview(label)
-            label.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                label.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8)
-            ])
+    // MARK: - Configuration Methods
+    
+    private func configureFlutterEngine() {
+        flutterEngine.run()
     }
-
-    func myTextField() {
+    
+    private func configureFlutterChannel() {
+        channel = FlutterMethodChannel(name: "example.com/channel", binaryMessenger: flutterEngine.binaryMessenger)
+        channel.setMethodCallHandler(handleMethodCall)
+    }
+    
+    private func configureLabel() {
+        label = UILabel()
+        label.text = "iOS"
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 32)
+        view.addSubview(label)
+        
+        label.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            label.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8)
+        ])
+    }
+    
+    private func configureTextField() {
         textField = UITextField(frame: CGRect(x: 45, y: 100, width: 300, height: 40))
         textField.borderStyle = .roundedRect
         textField.placeholder = "Enter a value to send.."
         view.addSubview(textField)
+        
         textField.translatesAutoresizingMaskIntoConstraints = false
     }
-
-    func myButton() {
-        let button = UIButton(type: .custom)
-        button.setTitle("SEND THE VALUE TO THE FLUTTER", for: .normal)
+    
+    private func configureButton() {
+        button = UIButton(type: .custom)
+        button.setTitle("To Send", for: .normal)
         button.backgroundColor = .systemOrange
         button.addTarget(self, action: #selector(showFlutter), for: .touchUpInside)
         view.addSubview(button)
+        
         button.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -65,19 +83,24 @@ class ViewController: UIViewController {
             textField.heightAnchor.constraint(equalToConstant: 40)
         ])
     }
-
-    @objc func showFlutter() {
+    
+    // MARK: - Action Methods
+    
+    @objc private func showFlutter() {
         let flutterViewController = FlutterViewController(engine: flutterEngine, nibName: nil, bundle: nil)
         flutterViewController.modalPresentationStyle = .fullScreen
         present(flutterViewController, animated: true, completion: nil)
     }
-
-    func handleMethodCall(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        let message = textField.text ?? ""
-        if call.method == "getText" {
-            result(message)
+    
+    // MARK: - Helper Methods
+    
+    private func handleMethodCall(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        let sendData = textField.text ?? ""
+        if call.method == "data" {
+            result(sendData)
         } else {
             result(FlutterMethodNotImplemented)
         }
     }
+    
 }

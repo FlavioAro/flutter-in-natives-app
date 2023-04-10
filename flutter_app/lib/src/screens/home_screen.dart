@@ -11,11 +11,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String valueReceived = '';
   static const channelName = MethodChannel('example.com/channel');
-  static const getMethodText = "getText";
+  static const getMethodData = "data";
 
   Future<void> getValueReceived() async {
     try {
-      valueReceived = await channelName.invokeMethod(getMethodText);
+      valueReceived = await channelName.invokeMethod(getMethodData);
     } on PlatformException {
       valueReceived = '';
     }
@@ -40,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-              'Value received through communication with native platforms using Method Channel:',
+              'Value received:',
             ),
             Text(
               valueReceived,
